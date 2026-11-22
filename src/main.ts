@@ -8,7 +8,7 @@
 // bootstrap();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import admin from 'firebase-admin';
+import { initFirebase } from './shared/libs/firebase-auth';
 import { swaggerLoader } from './shared/swagger';
 import { PrismaService } from './shared/modules/prisma/prisma.service';
 import { ValidationPipe } from '@nestjs/common';
@@ -31,10 +31,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  admin.initializeApp({
-    credential: admin.credential.cert('./resource/serviceAccountKey.json'),
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  });
+  initFirebase();
 
   await app.listen(4000);
   // eslint-disable-next-line no-console

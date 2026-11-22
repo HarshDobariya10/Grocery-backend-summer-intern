@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Status, UserType } from '@prisma/client';
 import admin from 'firebase-admin';
+import { verifyFirebaseToken } from 'src/shared/libs/firebase-auth';
 import { UserSessionCoreService } from 'src/core/user-session-core';
 import { AuthMessages, UserMessages } from 'src/shared/keys';
 import { UserCoreService } from 'src/core/user-core/user-core.service';
@@ -209,7 +210,7 @@ export class AdminAuthService {
     const token = parts[1];
 
     try {
-      const decodedToken = await (admin as any).auth().verifyIdToken(token);
+      const decodedToken = await verifyFirebaseToken(token);
       return decodedToken;
     } catch {
       throw new UnauthorizedException(AuthMessages.TOKEN_EXPIRED);

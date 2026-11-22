@@ -6,6 +6,7 @@ import {
 import { UserSessionType } from '../types/user-session.type';
 
 import admin from 'firebase-admin';
+import { verifyFirebaseToken } from 'src/shared/libs/firebase-auth';
 import { AuthMessages } from '../keys/user.keys';
 import { PrismaClient, Status } from '@prisma/client';
 
@@ -37,7 +38,7 @@ export const GetUserSession = createParamDecorator(
     const token = parts[1];
 
     try {
-      const decodedToken = await admin.auth().verifyIdToken(token);
+      const decodedToken = await verifyFirebaseToken(token);
 
       const prisma = new PrismaClient();
 
